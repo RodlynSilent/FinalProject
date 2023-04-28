@@ -4,17 +4,26 @@
  */
 package com.csit228g3.mahilum.mahilum_final_project;
 
+import java.sql.ResultSet;
+import java.sql.SQLException;
+import java.util.logging.Level;
+import java.util.logging.Logger;
+import javax.swing.table.DefaultTableModel;
+
 /**
  *
  * @author karin
  */
 public class DisplayItems extends javax.swing.JFrame {
+    private DBHelper dbHelper;
 
     /**
      * Creates new form DisplayItem
      */
     public DisplayItems() {
         initComponents();
+        dbHelper = new DBHelper();
+        initData();
     }
 
     /**
@@ -30,6 +39,7 @@ public class DisplayItems extends javax.swing.JFrame {
         jTable1 = new javax.swing.JTable();
         jLabel1 = new javax.swing.JLabel();
         btnDisplayAll = new javax.swing.JButton();
+        jButton1 = new javax.swing.JButton();
 
         setDefaultCloseOperation(javax.swing.WindowConstants.EXIT_ON_CLOSE);
 
@@ -50,10 +60,22 @@ public class DisplayItems extends javax.swing.JFrame {
         jLabel1.setText("Display Item Records");
 
         btnDisplayAll.setFont(new java.awt.Font("Segoe UI", 1, 12)); // NOI18N
-        btnDisplayAll.setText("DISPLAY ALL");
+        btnDisplayAll.setText("ADD ITEM");
+        btnDisplayAll.addMouseListener(new java.awt.event.MouseAdapter() {
+            public void mouseClicked(java.awt.event.MouseEvent evt) {
+                btnDisplayAllMouseClicked(evt);
+            }
+        });
         btnDisplayAll.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
                 btnDisplayAllActionPerformed(evt);
+            }
+        });
+
+        jButton1.setText("DISPLAY ALL");
+        jButton1.addMouseListener(new java.awt.event.MouseAdapter() {
+            public void mouseClicked(java.awt.event.MouseEvent evt) {
+                jButton1MouseClicked(evt);
             }
         });
 
@@ -70,7 +92,9 @@ public class DisplayItems extends javax.swing.JFrame {
                 .addComponent(jLabel1)
                 .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
             .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, layout.createSequentialGroup()
-                .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                .addGap(21, 21, 21)
+                .addComponent(jButton1)
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
                 .addComponent(btnDisplayAll)
                 .addGap(34, 34, 34))
         );
@@ -80,7 +104,9 @@ public class DisplayItems extends javax.swing.JFrame {
                 .addGap(23, 23, 23)
                 .addComponent(jLabel1)
                 .addGap(3, 3, 3)
-                .addComponent(btnDisplayAll)
+                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
+                    .addComponent(btnDisplayAll)
+                    .addComponent(jButton1))
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, 31, Short.MAX_VALUE)
                 .addComponent(jScrollPane1, javax.swing.GroupLayout.PREFERRED_SIZE, 285, javax.swing.GroupLayout.PREFERRED_SIZE)
                 .addContainerGap())
@@ -93,6 +119,41 @@ public class DisplayItems extends javax.swing.JFrame {
         // TODO add your handling code here:
     }//GEN-LAST:event_btnDisplayAllActionPerformed
 
+    private void btnDisplayAllMouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_btnDisplayAllMouseClicked
+        // TODO add your handling code here:
+        AddItem addItem = new AddItem();
+        addItem.setVisible(true);
+        dispose();
+    }//GEN-LAST:event_btnDisplayAllMouseClicked
+
+    private void jButton1MouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_jButton1MouseClicked
+        // TODO add your handling code here:
+        initData();
+    }//GEN-LAST:event_jButton1MouseClicked
+
+    public void initData() {
+        DefaultTableModel tableModel = (DefaultTableModel) jTable1.getModel();
+        tableModel.setRowCount(0);
+        try {
+            ResultSet rs = dbHelper.getItems();
+            while (rs.next()) {
+                int id = rs.getInt("id");
+                String category = rs.getString("category");
+                String item = rs.getString("item");
+                String supplier = rs.getString("supplier");
+                String customer = rs.getString("customer");
+                Object[] row = {id, category, item, supplier, customer};
+                addRowToTable(row);
+            }
+        } catch (SQLException ex) {
+            Logger.getLogger(DisplayItems.class.getName()).log(Level.SEVERE, null, ex);
+        }
+    }
+    public void addRowToTable(Object[] dataRows) {
+        DefaultTableModel model = (DefaultTableModel) jTable1.getModel();
+
+        model.addRow(dataRows);
+    }
     /**
      * @param args the command line arguments
      */
@@ -131,6 +192,7 @@ public class DisplayItems extends javax.swing.JFrame {
 
     // Variables declaration - do not modify//GEN-BEGIN:variables
     private javax.swing.JButton btnDisplayAll;
+    private javax.swing.JButton jButton1;
     private javax.swing.JLabel jLabel1;
     private javax.swing.JScrollPane jScrollPane1;
     private javax.swing.JTable jTable1;

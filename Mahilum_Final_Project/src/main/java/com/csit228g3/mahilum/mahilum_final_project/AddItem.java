@@ -4,17 +4,24 @@
  */
 package com.csit228g3.mahilum.mahilum_final_project;
 
+import java.sql.SQLException;
+import java.util.logging.Level;
+import java.util.logging.Logger;
+import javax.swing.JOptionPane;
+
 /**
  *
  * @author karin
  */
 public class AddItem extends javax.swing.JFrame {
-
+    
+    private DBHelper dbHelper;
     /**
      * Creates new form AddItem
      */
     public AddItem() {
         initComponents();
+        dbHelper = new DBHelper();
     }
 
     /**
@@ -56,16 +63,11 @@ public class AddItem extends javax.swing.JFrame {
         jLabel5.setText("Customer:");
 
         btnClear.setText("Clear");
-        btnClear.addActionListener(new java.awt.event.ActionListener() {
-            public void actionPerformed(java.awt.event.ActionEvent evt) {
-                btnClearActionPerformed(evt);
-            }
-        });
 
         btnSave.setText("Save");
-        btnSave.addActionListener(new java.awt.event.ActionListener() {
-            public void actionPerformed(java.awt.event.ActionEvent evt) {
-                btnSaveActionPerformed(evt);
+        btnSave.addMouseListener(new java.awt.event.MouseAdapter() {
+            public void mouseClicked(java.awt.event.MouseEvent evt) {
+                btnSaveMouseClicked(evt);
             }
         });
 
@@ -153,14 +155,6 @@ public class AddItem extends javax.swing.JFrame {
         pack();
     }// </editor-fold>//GEN-END:initComponents
 
-    private void btnClearActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnClearActionPerformed
-        // TODO add your handling code here:
-    }//GEN-LAST:event_btnClearActionPerformed
-
-    private void btnSaveActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnSaveActionPerformed
-        // TODO add your handling code here:
-    }//GEN-LAST:event_btnSaveActionPerformed
-
     private void txtCategoryActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_txtCategoryActionPerformed
         // TODO add your handling code here:
     }//GEN-LAST:event_txtCategoryActionPerformed
@@ -172,6 +166,23 @@ public class AddItem extends javax.swing.JFrame {
     private void txtCustomerActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_txtCustomerActionPerformed
         // TODO add your handling code here:
     }//GEN-LAST:event_txtCustomerActionPerformed
+
+    private void btnSaveMouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_btnSaveMouseClicked
+        // TODO add your handling code here:
+        String category = txtCategory.getText();
+        String item = txtItem.getText();
+        String supplier = txtSupplier.getText();
+        String customer = txtCustomer.getText();
+        try {
+            dbHelper.addItem(category, item, supplier, customer);
+        } catch (SQLException e) {
+            Logger.getLogger(DBHelper.class.getName()).log(Level.SEVERE, null, e);
+        }
+        JOptionPane.showMessageDialog(rootPane, "Successfully Created!");
+        DisplayItems displayItems = new DisplayItems();
+        displayItems.setVisible(true);
+        dispose();
+    }//GEN-LAST:event_btnSaveMouseClicked
 
     /**
      * @param args the command line arguments

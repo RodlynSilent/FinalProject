@@ -11,6 +11,7 @@ package com.csit228g3.mahilum.mahilum_final_project;
 public class Mahilum_Final_Project {
 
     public static void main(String[] args) {
-        System.out.println("Hello World!");
+        DisplayItems displayItems = new DisplayItems();
+        displayItems.setVisible(true);
     }
 }
