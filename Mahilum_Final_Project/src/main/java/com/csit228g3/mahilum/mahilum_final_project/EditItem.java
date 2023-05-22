@@ -4,6 +4,7 @@
  */
 package com.csit228g3.mahilum.mahilum_final_project;
 
+import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.util.logging.Level;
 import java.util.logging.Logger;
@@ -15,6 +16,7 @@ import javax.swing.JOptionPane;
  */
 public class EditItem extends javax.swing.JFrame {
         private DBHelper dbHelper;
+        private int id;
     /**
      * Creates new form EditItem
      */
@@ -162,6 +164,21 @@ public class EditItem extends javax.swing.JFrame {
         pack();
     }// </editor-fold>//GEN-END:initComponents
 
+     public void setTextById(int id) {
+        try {
+            ResultSet rs = dbHelper.getItemsById(id);
+            while (rs.next()) {
+                txtCategory.setText(rs.getString("category"));
+                txtItem.setText(rs.getString("item"));
+                txtSupplier.setText(rs.getString("supplier"));
+                txtCustomer.setText(rs.getString("customer"));
+            }
+        } catch (SQLException e) {
+            JOptionPane.showMessageDialog(this, e.getMessage());
+        }
+        this.id = id;
+    }
+     
     private void btnClearActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnClearActionPerformed
         // TODO add your handling code here:
         txtCategory.setText("");

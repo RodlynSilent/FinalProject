@@ -45,6 +45,10 @@ public class DBHelper {
         return query.execute("SELECT * FROM tblitem WHERE customer = '" + customer + "'");
     }
         
+    public ResultSet getItemsById(int id) throws SQLException{
+        return query.execute("SELECT * FROM tblitem WHERE id = " + id);
+    }
+        
     public ResultSet getItemsByItems(String item) throws SQLException{
         return query.execute("SELECT * FROM tblitem WHERE item = '" + item+ "'");
     }
@@ -92,7 +96,15 @@ public class DBHelper {
         query.close();
     }
 
-    void deleteItemsByItems(int id) {
+    public void deleteItemsByItems(int id) throws SQLException {
+        query.update("DELETE FROM tblitem WHERE id = " + id); // Generated from nbfs://nbhost/SystemFileSystem/Templates/Classes/Code/GeneratedMethodBody
+    }
+
+    void connectdb() {
+        throw new UnsupportedOperationException("Not supported yet."); // Generated from nbfs://nbhost/SystemFileSystem/Templates/Classes/Code/GeneratedMethodBody
+    }
+
+    void disconnected() {
         throw new UnsupportedOperationException("Not supported yet."); // Generated from nbfs://nbhost/SystemFileSystem/Templates/Classes/Code/GeneratedMethodBody
     }
   

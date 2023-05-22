@@ -16,7 +16,11 @@ import javax.swing.table.DefaultTableModel;
  * @author karin
  */
 public class DisplayItems extends javax.swing.JFrame {
+
     private DBHelper dbHelper;
+    private Object txtItem;
+    private Object txtSupplier;
+    private Object txtCustomer;
 
     /**
      * Creates new form DisplayItem
@@ -119,6 +123,16 @@ public class DisplayItems extends javax.swing.JFrame {
         });
 
         btnUpdate.setText("Update");
+        btnUpdate.addMouseListener(new java.awt.event.MouseAdapter() {
+            public void mouseClicked(java.awt.event.MouseEvent evt) {
+                btnUpdateMouseClicked(evt);
+            }
+        });
+        btnUpdate.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                btnUpdateActionPerformed(evt);
+            }
+        });
 
         btnDelete.setText("Delete");
         btnDelete.addMouseListener(new java.awt.event.MouseAdapter() {
@@ -218,7 +232,7 @@ public class DisplayItems extends javax.swing.JFrame {
 
     private void btnDisplayALLActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnDisplayALLActionPerformed
         // TODO add your handling code here:
-        
+
     }//GEN-LAST:event_btnDisplayALLActionPerformed
 
     private void cmbFilterActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_cmbFilterActionPerformed
@@ -231,7 +245,7 @@ public class DisplayItems extends javax.swing.JFrame {
 
     private void btnGoActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnGoActionPerformed
         // TODO add your handling code here:
-        
+
     }//GEN-LAST:event_btnGoActionPerformed
 
     private void btnGoMouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_btnGoMouseClicked
@@ -242,8 +256,11 @@ public class DisplayItems extends javax.swing.JFrame {
         try {
             ResultSet rs = null;
             switch (selectedItem.toString()) {
+                case "ID":
+                    rs = dbHelper.getItemsById(Integer.parseInt(filter));
+                    break;
                 case "Category":
-                    rs = dbHelper.getItemsByCustomer(filter);
+                    rs = dbHelper.getItemsByCategory(filter);
                     break;
                 case "Item":
                     rs = dbHelper.getItemsByItems(filter);
@@ -262,7 +279,7 @@ public class DisplayItems extends javax.swing.JFrame {
         } catch (SQLException e) {
             Logger.getLogger(DisplayItems.class.getName()).log(Level.SEVERE, null, e);
         }
-        
+
     }//GEN-LAST:event_btnGoMouseClicked
 
     private void btnDeleteActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnDeleteActionPerformed
@@ -278,21 +295,42 @@ public class DisplayItems extends javax.swing.JFrame {
         }
         int id = Integer.parseInt(model.getValueAt(selectedRowIndex, 0).toString());
         try {
-             int response = JOptionPane.showConfirmDialog(rootPane, "Are you sure you want to delete this record?");   
-                if (response == 0){
-                    System.out.println("ok");
-                    dbHelper.deleteItemsByItems(id);
+            int response = JOptionPane.showConfirmDialog(rootPane, "Are you sure you want to delete this record?");
+            if (response == 0) {
+                System.out.println("ok");
+                dbHelper.deleteItemsByItems(id);
 
-                    JOptionPane.showMessageDialog(rootPane, "Record deleted!");
-                    initData();
-                }else
-                JOptionPane.showMessageDialog(  rootPane, "Record NOT deleted!");
-            
+                JOptionPane.showMessageDialog(rootPane, "Record deleted!");
+                initData();
+            } else {
+                JOptionPane.showMessageDialog(rootPane, "Record NOT deleted!");
+            }
+
         } catch (/*SQL*/Exception e) {
             Logger.getLogger(DisplayItems.class.getName()).log(Level.SEVERE, null, e);
         }
-        
+
     }//GEN-LAST:event_btnDeleteMouseClicked
+
+    private void btnUpdateActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnUpdateActionPerformed
+        // TODO add your handling code here:
+
+
+    }//GEN-LAST:event_btnUpdateActionPerformed
+
+    private void btnUpdateMouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_btnUpdateMouseClicked
+        // TODO add your handling code here:
+         DefaultTableModel model = (DefaultTableModel) tblItem.getModel();
+        int selectedRowIndex = tblItem.getSelectedRow();
+        if (selectedRowIndex == -1) {
+            return;
+        }
+        int id = Integer.parseInt(model.getValueAt(selectedRowIndex, 0).toString());
+        EditItem updateCustomer = new EditItem();
+        updateCustomer.setTextById(id);
+        updateCustomer.setVisible(true);
+        dispose();
+    }//GEN-LAST:event_btnUpdateMouseClicked
 
     public void initData() {
         DefaultTableModel tableModel = (DefaultTableModel) tblItem.getModel();
@@ -312,26 +350,28 @@ public class DisplayItems extends javax.swing.JFrame {
             Logger.getLogger(DisplayItems.class.getName()).log(Level.SEVERE, null, ex);
         }
     }
+
     public void addRowToTable(Object[] dataRows) {
         DefaultTableModel model = (DefaultTableModel) tblItem.getModel();
 
         model.addRow(dataRows);
     }
-    
-    private void rsAddRow(ResultSet rs) throws SQLException{
+
+    private void rsAddRow(ResultSet rs) throws SQLException {
         DefaultTableModel tableModel = (DefaultTableModel) tblItem.getModel();
         tableModel.setRowCount(0);
         while (rs.next()) {
-                String category = rs.getString("category");
-                String item = rs.getString("item");
-                String supplier = rs.getString("supplier");
-                String customer = rs.getString("customer");
-                                
-                Object[] row = {category, item, supplier, customer};
-                addRowToTable(row);
-            }
+            int id = rs.getInt("id");
+            String category = rs.getString("category");
+            String item = rs.getString("item");
+            String supplier = rs.getString("supplier");
+            String customer = rs.getString("customer");
+
+            Object[] row = {id, category, item, supplier, customer};
+            addRowToTable(row);
+        }
     }
-    
+
     /**
      * @param args the command line arguments
      */
@@ -381,4 +421,8 @@ public class DisplayItems extends javax.swing.JFrame {
     private javax.swing.JTable tblItem;
     private javax.swing.JTextField txtFilter;
     // End of variables declaration//GEN-END:variables
+
+    private void clear() {
+        throw new UnsupportedOperationException("Not supported yet."); // Generated from nbfs://nbhost/SystemFileSystem/Templates/Classes/Code/GeneratedMethodBody
+    }
 }
