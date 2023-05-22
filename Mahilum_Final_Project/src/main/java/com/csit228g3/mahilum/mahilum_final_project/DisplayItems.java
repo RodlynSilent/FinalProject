@@ -8,6 +8,7 @@ import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.util.logging.Level;
 import java.util.logging.Logger;
+import javax.swing.JOptionPane;
 import javax.swing.table.DefaultTableModel;
 
 /**
@@ -36,25 +37,31 @@ public class DisplayItems extends javax.swing.JFrame {
     private void initComponents() {
 
         jScrollPane1 = new javax.swing.JScrollPane();
-        jTable1 = new javax.swing.JTable();
+        tblItem = new javax.swing.JTable();
         jLabel1 = new javax.swing.JLabel();
         btnDisplayAll = new javax.swing.JButton();
-        jButton1 = new javax.swing.JButton();
+        btnDisplayALL = new javax.swing.JButton();
+        jLabel2 = new javax.swing.JLabel();
+        cmbFilter = new javax.swing.JComboBox<>();
+        txtFilter = new javax.swing.JTextField();
+        btnGo = new javax.swing.JButton();
+        btnUpdate = new javax.swing.JButton();
+        btnDelete = new javax.swing.JButton();
 
         setDefaultCloseOperation(javax.swing.WindowConstants.EXIT_ON_CLOSE);
 
-        jTable1.setModel(new javax.swing.table.DefaultTableModel(
+        tblItem.setModel(new javax.swing.table.DefaultTableModel(
             new Object [][] {
-                {null, null, null, null},
-                {null, null, null, null},
-                {null, null, null, null},
-                {null, null, null, null}
+                {null, null, null, null, null},
+                {null, null, null, null, null},
+                {null, null, null, null, null},
+                {null, null, null, null, null}
             },
             new String [] {
-                "Item", "Category", "Customer", "Supplier"
+                "ID", "Category", "Item", "Supplier", "Customer"
             }
         ));
-        jScrollPane1.setViewportView(jTable1);
+        jScrollPane1.setViewportView(tblItem);
 
         jLabel1.setFont(new java.awt.Font("Segoe UI", 1, 18)); // NOI18N
         jLabel1.setText("Display Item Records");
@@ -72,10 +79,56 @@ public class DisplayItems extends javax.swing.JFrame {
             }
         });
 
-        jButton1.setText("DISPLAY ALL");
-        jButton1.addMouseListener(new java.awt.event.MouseAdapter() {
+        btnDisplayALL.setText("DISPLAY ALL");
+        btnDisplayALL.addMouseListener(new java.awt.event.MouseAdapter() {
             public void mouseClicked(java.awt.event.MouseEvent evt) {
-                jButton1MouseClicked(evt);
+                btnDisplayALLMouseClicked(evt);
+            }
+        });
+        btnDisplayALL.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                btnDisplayALLActionPerformed(evt);
+            }
+        });
+
+        jLabel2.setText("Filter by:");
+
+        cmbFilter.setModel(new javax.swing.DefaultComboBoxModel<>(new String[] { "ID", "Category", "Item", "Supplier", "Customer" }));
+        cmbFilter.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                cmbFilterActionPerformed(evt);
+            }
+        });
+
+        txtFilter.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                txtFilterActionPerformed(evt);
+            }
+        });
+
+        btnGo.setText("GO");
+        btnGo.addMouseListener(new java.awt.event.MouseAdapter() {
+            public void mouseClicked(java.awt.event.MouseEvent evt) {
+                btnGoMouseClicked(evt);
+            }
+        });
+        btnGo.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                btnGoActionPerformed(evt);
+            }
+        });
+
+        btnUpdate.setText("Update");
+
+        btnDelete.setText("Delete");
+        btnDelete.addMouseListener(new java.awt.event.MouseAdapter() {
+            public void mouseClicked(java.awt.event.MouseEvent evt) {
+                btnDeleteMouseClicked(evt);
+            }
+        });
+        btnDelete.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                btnDeleteActionPerformed(evt);
             }
         });
 
@@ -85,31 +138,63 @@ public class DisplayItems extends javax.swing.JFrame {
             layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
             .addGroup(layout.createSequentialGroup()
                 .addContainerGap()
-                .addComponent(jScrollPane1, javax.swing.GroupLayout.DEFAULT_SIZE, 597, Short.MAX_VALUE)
+                .addComponent(jScrollPane1, javax.swing.GroupLayout.DEFAULT_SIZE, 544, Short.MAX_VALUE)
                 .addContainerGap())
             .addGroup(layout.createSequentialGroup()
-                .addGap(213, 213, 213)
-                .addComponent(jLabel1)
-                .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
-            .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, layout.createSequentialGroup()
-                .addGap(21, 21, 21)
-                .addComponent(jButton1)
+                .addGap(24, 24, 24)
+                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING)
+                    .addGroup(layout.createSequentialGroup()
+                        .addComponent(jLabel2, javax.swing.GroupLayout.PREFERRED_SIZE, 69, javax.swing.GroupLayout.PREFERRED_SIZE)
+                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                        .addComponent(cmbFilter, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
+                    .addGroup(layout.createSequentialGroup()
+                        .addComponent(btnDisplayALL)
+                        .addGap(83, 83, 83)))
+                .addGap(30, 30, 30)
+                .addComponent(txtFilter, javax.swing.GroupLayout.PREFERRED_SIZE, 170, javax.swing.GroupLayout.PREFERRED_SIZE)
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
-                .addComponent(btnDisplayAll)
-                .addGap(34, 34, 34))
+                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                    .addComponent(btnDisplayAll)
+                    .addComponent(btnGo))
+                .addGap(30, 30, 30))
+            .addGroup(layout.createSequentialGroup()
+                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                    .addGroup(layout.createSequentialGroup()
+                        .addGap(192, 192, 192)
+                        .addComponent(jLabel1))
+                    .addGroup(layout.createSequentialGroup()
+                        .addGap(168, 168, 168)
+                        .addComponent(btnUpdate)
+                        .addGap(71, 71, 71)
+                        .addComponent(btnDelete)))
+                .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
         );
         layout.setVerticalGroup(
             layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
             .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, layout.createSequentialGroup()
-                .addGap(23, 23, 23)
+                .addGap(12, 12, 12)
                 .addComponent(jLabel1)
-                .addGap(3, 3, 3)
+                .addGap(18, 18, 18)
                 .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
-                    .addComponent(btnDisplayAll)
-                    .addComponent(jButton1))
-                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, 31, Short.MAX_VALUE)
-                .addComponent(jScrollPane1, javax.swing.GroupLayout.PREFERRED_SIZE, 285, javax.swing.GroupLayout.PREFERRED_SIZE)
-                .addContainerGap())
+                    .addComponent(jLabel2)
+                    .addComponent(cmbFilter, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                    .addComponent(txtFilter, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                    .addComponent(btnGo))
+                .addGap(23, 23, 23)
+                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
+                    .addComponent(btnDisplayALL)
+                    .addComponent(btnDisplayAll))
+                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                    .addGroup(layout.createSequentialGroup()
+                        .addGap(28, 28, 28)
+                        .addComponent(jScrollPane1, javax.swing.GroupLayout.PREFERRED_SIZE, 237, javax.swing.GroupLayout.PREFERRED_SIZE)
+                        .addGap(58, 87, Short.MAX_VALUE))
+                    .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, layout.createSequentialGroup()
+                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                        .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
+                            .addComponent(btnUpdate)
+                            .addComponent(btnDelete))
+                        .addGap(36, 36, 36))))
         );
 
         pack();
@@ -126,13 +211,91 @@ public class DisplayItems extends javax.swing.JFrame {
         dispose();
     }//GEN-LAST:event_btnDisplayAllMouseClicked
 
-    private void jButton1MouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_jButton1MouseClicked
+    private void btnDisplayALLMouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_btnDisplayALLMouseClicked
         // TODO add your handling code here:
         initData();
-    }//GEN-LAST:event_jButton1MouseClicked
+    }//GEN-LAST:event_btnDisplayALLMouseClicked
+
+    private void btnDisplayALLActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnDisplayALLActionPerformed
+        // TODO add your handling code here:
+        
+    }//GEN-LAST:event_btnDisplayALLActionPerformed
+
+    private void cmbFilterActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_cmbFilterActionPerformed
+        // TODO add your handling code here:
+    }//GEN-LAST:event_cmbFilterActionPerformed
+
+    private void txtFilterActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_txtFilterActionPerformed
+        // TODO add your handling code here:
+    }//GEN-LAST:event_txtFilterActionPerformed
+
+    private void btnGoActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnGoActionPerformed
+        // TODO add your handling code here:
+        
+    }//GEN-LAST:event_btnGoActionPerformed
+
+    private void btnGoMouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_btnGoMouseClicked
+        // TODO add your handling code here:
+        String filter = txtFilter.getText();
+        Object selectedItem = cmbFilter.getSelectedItem();
+
+        try {
+            ResultSet rs = null;
+            switch (selectedItem.toString()) {
+                case "Category":
+                    rs = dbHelper.getItemsByCustomer(filter);
+                    break;
+                case "Item":
+                    rs = dbHelper.getItemsByItems(filter);
+                    break;
+                case "Supplier":
+                    rs = dbHelper.getItemsBySupplier(filter);
+                    break;
+                case "Customer":
+                    rs = dbHelper.getItemsByCustomer(filter);
+                    break;
+                default:
+                    rs = dbHelper.getItems();
+                    break;
+            }
+            rsAddRow(rs);
+        } catch (SQLException e) {
+            Logger.getLogger(DisplayItems.class.getName()).log(Level.SEVERE, null, e);
+        }
+        
+    }//GEN-LAST:event_btnGoMouseClicked
+
+    private void btnDeleteActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnDeleteActionPerformed
+        // TODO add your handling code here:
+    }//GEN-LAST:event_btnDeleteActionPerformed
+
+    private void btnDeleteMouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_btnDeleteMouseClicked
+        // TODO add your handling code here:
+        DefaultTableModel model = (DefaultTableModel) tblItem.getModel();
+        int selectedRowIndex = tblItem.getSelectedRow();
+        if (selectedRowIndex == -1) {
+            return;
+        }
+        int id = Integer.parseInt(model.getValueAt(selectedRowIndex, 0).toString());
+        try {
+             int response = JOptionPane.showConfirmDialog(rootPane, "Are you sure you want to delete this record?");   
+                if (response == 0){
+                    System.out.println("ok");
+                    dbHelper.deleteItemsByItems(id);
+
+                    JOptionPane.showMessageDialog(rootPane, "Record deleted!");
+                    initData();
+                }else
+                JOptionPane.showMessageDialog(  rootPane, "Record NOT deleted!");
+            
+        } catch (/*SQL*/Exception e) {
+            Logger.getLogger(DisplayItems.class.getName()).log(Level.SEVERE, null, e);
+        }
+        
+    }//GEN-LAST:event_btnDeleteMouseClicked
 
     public void initData() {
-        DefaultTableModel tableModel = (DefaultTableModel) jTable1.getModel();
+        DefaultTableModel tableModel = (DefaultTableModel) tblItem.getModel();
         tableModel.setRowCount(0);
         try {
             ResultSet rs = dbHelper.getItems();
@@ -150,10 +313,25 @@ public class DisplayItems extends javax.swing.JFrame {
         }
     }
     public void addRowToTable(Object[] dataRows) {
-        DefaultTableModel model = (DefaultTableModel) jTable1.getModel();
+        DefaultTableModel model = (DefaultTableModel) tblItem.getModel();
 
         model.addRow(dataRows);
     }
+    
+    private void rsAddRow(ResultSet rs) throws SQLException{
+        DefaultTableModel tableModel = (DefaultTableModel) tblItem.getModel();
+        tableModel.setRowCount(0);
+        while (rs.next()) {
+                String category = rs.getString("category");
+                String item = rs.getString("item");
+                String supplier = rs.getString("supplier");
+                String customer = rs.getString("customer");
+                                
+                Object[] row = {category, item, supplier, customer};
+                addRowToTable(row);
+            }
+    }
+    
     /**
      * @param args the command line arguments
      */
@@ -191,10 +369,16 @@ public class DisplayItems extends javax.swing.JFrame {
     }
 
     // Variables declaration - do not modify//GEN-BEGIN:variables
+    private javax.swing.JButton btnDelete;
+    private javax.swing.JButton btnDisplayALL;
     private javax.swing.JButton btnDisplayAll;
-    private javax.swing.JButton jButton1;
+    private javax.swing.JButton btnGo;
+    private javax.swing.JButton btnUpdate;
+    private javax.swing.JComboBox<String> cmbFilter;
     private javax.swing.JLabel jLabel1;
+    private javax.swing.JLabel jLabel2;
     private javax.swing.JScrollPane jScrollPane1;
-    private javax.swing.JTable jTable1;
+    private javax.swing.JTable tblItem;
+    private javax.swing.JTextField txtFilter;
     // End of variables declaration//GEN-END:variables
 }

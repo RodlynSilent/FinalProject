@@ -34,6 +34,40 @@ public class DBHelper {
         return query.execute("SELECT * FROM tblitem");
     }
     
+     public ResultSet getItemsByCategory(String category) throws SQLException{
+        return query.execute("SELECT * FROM tblitem WHERE category = '" + category + "'");
+    }
+    public ResultSet getItemsBySupplier(String supplier) throws SQLException{
+        return query.execute("SELECT * FROM tblitem WHERE supplier = '" + supplier + "'");
+    }
+  
+    public ResultSet getItemsByCustomer(String customer) throws SQLException{
+        return query.execute("SELECT * FROM tblitem WHERE customer = '" + customer + "'");
+    }
+        
+    public ResultSet getItemsByItems(String item) throws SQLException{
+        return query.execute("SELECT * FROM tblitem WHERE item = '" + item+ "'");
+    }
+    
+     public void editItemsByItems(String category, String item, String supplier, String customer) throws SQLException {
+            String sql = "UPDATE tblitem SET category = '" + category + "', customer = '" + customer + "', supplier = '" + supplier + "' WHERE item = " + item;
+            query.update(sql);
+        
+        }
+     
+     public void deleteItemsByItems(String category) throws SQLException{
+            query.update("DELETE FROM tblitem WHERE category= " + category);
+        }
+
+    
+    
+    
+    
+  
+    
+    
+ 
+    
     public void deleteProduct(int id) throws SQLException{
         query.update("DELETE FROM tblaccount WHERE id = " + id);
     }
@@ -56,6 +90,10 @@ public class DBHelper {
     
     public void close() throws SQLException{
         query.close();
+    }
+
+    void deleteItemsByItems(int id) {
+        throw new UnsupportedOperationException("Not supported yet."); // Generated from nbfs://nbhost/SystemFileSystem/Templates/Classes/Code/GeneratedMethodBody
     }
   
     

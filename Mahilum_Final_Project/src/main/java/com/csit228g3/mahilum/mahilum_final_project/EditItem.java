@@ -13,13 +13,12 @@ import javax.swing.JOptionPane;
  *
  * @author karin
  */
-public class AddItem extends javax.swing.JFrame {
-    
-    private DBHelper dbHelper;
+public class EditItem extends javax.swing.JFrame {
+        private DBHelper dbHelper;
     /**
-     * Creates new form AddItem
+     * Creates new form EditItem
      */
-    public AddItem() {
+    public EditItem() {
         initComponents();
         dbHelper = new DBHelper();
     }
@@ -33,10 +32,6 @@ public class AddItem extends javax.swing.JFrame {
     // <editor-fold defaultstate="collapsed" desc="Generated Code">//GEN-BEGIN:initComponents
     private void initComponents() {
 
-        jLabel8 = new javax.swing.JLabel();
-        jLabel1 = new javax.swing.JLabel();
-        jLabel2 = new javax.swing.JLabel();
-        jLabel3 = new javax.swing.JLabel();
         jLabel4 = new javax.swing.JLabel();
         jLabel5 = new javax.swing.JLabel();
         btnClear = new javax.swing.JButton();
@@ -45,19 +40,11 @@ public class AddItem extends javax.swing.JFrame {
         txtItem = new javax.swing.JTextField();
         txtSupplier = new javax.swing.JTextField();
         txtCustomer = new javax.swing.JTextField();
-
-        jLabel8.setText("jLabel8");
+        jLabel1 = new javax.swing.JLabel();
+        jLabel2 = new javax.swing.JLabel();
+        jLabel3 = new javax.swing.JLabel();
 
         setDefaultCloseOperation(javax.swing.WindowConstants.EXIT_ON_CLOSE);
-
-        jLabel1.setFont(new java.awt.Font("Segoe UI", 1, 18)); // NOI18N
-        jLabel1.setText("Jewelry Domain");
-
-        jLabel2.setFont(new java.awt.Font("Segoe UI", 1, 12)); // NOI18N
-        jLabel2.setText("Category:");
-
-        jLabel3.setFont(new java.awt.Font("Segoe UI", 1, 12)); // NOI18N
-        jLabel3.setText("Item:");
 
         jLabel4.setFont(new java.awt.Font("Segoe UI", 1, 12)); // NOI18N
         jLabel4.setText("Supplier:");
@@ -102,6 +89,15 @@ public class AddItem extends javax.swing.JFrame {
             }
         });
 
+        jLabel1.setFont(new java.awt.Font("Segoe UI", 1, 18)); // NOI18N
+        jLabel1.setText("Jewelry Domain");
+
+        jLabel2.setFont(new java.awt.Font("Segoe UI", 1, 12)); // NOI18N
+        jLabel2.setText("Category:");
+
+        jLabel3.setFont(new java.awt.Font("Segoe UI", 1, 12)); // NOI18N
+        jLabel3.setText("Item:");
+
         javax.swing.GroupLayout layout = new javax.swing.GroupLayout(getContentPane());
         getContentPane().setLayout(layout);
         layout.setHorizontalGroup(
@@ -133,7 +129,7 @@ public class AddItem extends javax.swing.JFrame {
                     .addGroup(layout.createSequentialGroup()
                         .addGap(64, 64, 64)
                         .addComponent(jLabel1)))
-                .addContainerGap(63, Short.MAX_VALUE))
+                .addContainerGap(94, Short.MAX_VALUE))
         );
         layout.setVerticalGroup(
             layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
@@ -160,23 +156,19 @@ public class AddItem extends javax.swing.JFrame {
                 .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
                     .addComponent(btnClear)
                     .addComponent(btnSave))
-                .addContainerGap(67, Short.MAX_VALUE))
+                .addContainerGap(37, Short.MAX_VALUE))
         );
 
         pack();
     }// </editor-fold>//GEN-END:initComponents
 
-    private void txtCategoryActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_txtCategoryActionPerformed
+    private void btnClearActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnClearActionPerformed
         // TODO add your handling code here:
-    }//GEN-LAST:event_txtCategoryActionPerformed
-
-    private void txtSupplierActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_txtSupplierActionPerformed
-        // TODO add your handling code here:
-    }//GEN-LAST:event_txtSupplierActionPerformed
-
-    private void txtCustomerActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_txtCustomerActionPerformed
-        // TODO add your handling code here:
-    }//GEN-LAST:event_txtCustomerActionPerformed
+        txtCategory.setText("");
+        txtItem.setText("");
+        txtSupplier.setText("");
+        txtCustomer.setText("");
+    }//GEN-LAST:event_btnClearActionPerformed
 
     private void btnSaveMouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_btnSaveMouseClicked
         // TODO add your handling code here:
@@ -201,31 +193,34 @@ public class AddItem extends javax.swing.JFrame {
         String item = txtItem.getText();
         String supplier = txtSupplier.getText();
         String customer = txtCustomer.getText();
-        
-         try {
-        // establish connection to database
-        dbHelper.addItem(category, item, supplier, customer);
 
+        try {
+            // establish connection to database
+            dbHelper.addItem(category, item, supplier, customer);
 
-        // show success message
-        JOptionPane.showMessageDialog(this, "Item added successfully"); 
-        DisplayItems displayItems = new DisplayItems();
-        displayItems.setVisible(true);
-        dispose();
+            // show success message
+            JOptionPane.showMessageDialog(this, "Item added successfully");
+            DisplayItems displayItems = new DisplayItems();
+            displayItems.setVisible(true);
+            dispose();
 
         } catch (SQLException ex) {
-        // handle error
-        JOptionPane.showMessageDialog(this, "Error: " + ex.getMessage());
+            // handle error
+            JOptionPane.showMessageDialog(this, "Error: " + ex.getMessage());
         }
     }//GEN-LAST:event_btnSaveActionPerformed
 
-    private void btnClearActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnClearActionPerformed
+    private void txtCategoryActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_txtCategoryActionPerformed
         // TODO add your handling code here:
-            txtCategory.setText("");
-            txtItem.setText("");
-            txtSupplier.setText("");
-            txtCustomer.setText("");
-    }//GEN-LAST:event_btnClearActionPerformed
+    }//GEN-LAST:event_txtCategoryActionPerformed
+
+    private void txtSupplierActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_txtSupplierActionPerformed
+        // TODO add your handling code here:
+    }//GEN-LAST:event_txtSupplierActionPerformed
+
+    private void txtCustomerActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_txtCustomerActionPerformed
+        // TODO add your handling code here:
+    }//GEN-LAST:event_txtCustomerActionPerformed
 
     /**
      * @param args the command line arguments
@@ -244,20 +239,20 @@ public class AddItem extends javax.swing.JFrame {
                 }
             }
         } catch (ClassNotFoundException ex) {
-            java.util.logging.Logger.getLogger(AddItem.class.getName()).log(java.util.logging.Level.SEVERE, null, ex);
+            java.util.logging.Logger.getLogger(EditItem.class.getName()).log(java.util.logging.Level.SEVERE, null, ex);
         } catch (InstantiationException ex) {
-            java.util.logging.Logger.getLogger(AddItem.class.getName()).log(java.util.logging.Level.SEVERE, null, ex);
+            java.util.logging.Logger.getLogger(EditItem.class.getName()).log(java.util.logging.Level.SEVERE, null, ex);
         } catch (IllegalAccessException ex) {
-            java.util.logging.Logger.getLogger(AddItem.class.getName()).log(java.util.logging.Level.SEVERE, null, ex);
+            java.util.logging.Logger.getLogger(EditItem.class.getName()).log(java.util.logging.Level.SEVERE, null, ex);
         } catch (javax.swing.UnsupportedLookAndFeelException ex) {
-            java.util.logging.Logger.getLogger(AddItem.class.getName()).log(java.util.logging.Level.SEVERE, null, ex);
+            java.util.logging.Logger.getLogger(EditItem.class.getName()).log(java.util.logging.Level.SEVERE, null, ex);
         }
         //</editor-fold>
 
         /* Create and display the form */
         java.awt.EventQueue.invokeLater(new Runnable() {
             public void run() {
-                new AddItem().setVisible(true);
+                new EditItem().setVisible(true);
             }
         });
     }
@@ -270,7 +265,6 @@ public class AddItem extends javax.swing.JFrame {
     private javax.swing.JLabel jLabel3;
     private javax.swing.JLabel jLabel4;
     private javax.swing.JLabel jLabel5;
-    private javax.swing.JLabel jLabel8;
     private javax.swing.JTextField txtCategory;
     private javax.swing.JTextField txtCustomer;
     private javax.swing.JTextField txtItem;
